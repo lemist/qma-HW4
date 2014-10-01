@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,12 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/**
- * GUI
- * 
- * @author Qiyue Ma
- *
- */
+
 public class HW4GUI extends JFrame {
 	public static void main(String[] args) {
 		new HW4GUI();
@@ -47,7 +41,7 @@ public class HW4GUI extends JFrame {
 
 	public HW4GUI() {
 		setTitle("08-600 Checking Account Register");
-		setSize(850, 650);
+		setSize(950, 650);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pane = new JPanel();
@@ -182,11 +176,10 @@ public class HW4GUI extends JFrame {
 		c.gridy = 3;
 		pane.add(statusTextField, c);
 
-		tableTextArea = new JTextArea("", 20, 50);
+		tableTextArea = new JTextArea("", 23, 55);
 		tableTextArea.setEditable(false);
 		updateTableTextArea();
 		JScrollPane sp = new JScrollPane(tableTextArea); // set the panel
-															// scrollable
 		c.gridx = 1;
 		c.gridy = 4;
 		pane.add(tableTextArea, c);
@@ -196,8 +189,9 @@ public class HW4GUI extends JFrame {
 	}
 
 	protected Date convertDateStringToDate(String text) throws Exception {
-		String datePattern = "\\d{1,2}/\\d{1,2}/\\d{4}";
+		String datePattern = "^(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/\\d{4}$";
 		boolean isDate = text.matches(datePattern);
+		
 		if (!isDate) {
 			throw new Exception();
 		}
@@ -230,15 +224,15 @@ public class HW4GUI extends JFrame {
 	}
 
 	protected void updateTableTextArea() {
-		String formate = "%-15s%-15s%-40s%18s%18s%18s";
+		String format = "%-18s%-17s%-30s%30s%30s%30s";
 		StringBuilder tableContentBuilder = new StringBuilder();
-		tableContentBuilder.append(String.format(formate, "Date", "Check#",
+		tableContentBuilder.append(String.format(format, "Date", "      Check#",
 				"Description", "Amount", "Fee", "Balance") + "\n");
 		double balance = 0;
 		for (int i = 0; i < countOfTransaction; i++) {
 			HW4Data transaction = transactions[i];
-			balance += transaction.getAmount();
-			tableContentBuilder.append(transaction.asTableRowString(formate,
+			balance = balance + transaction.getAmount() - transaction.getFee();
+			tableContentBuilder.append(transaction.asTableRowString(format,
 					balance) + "\n");
 		}
 		tableTextArea.setText(tableContentBuilder.toString());

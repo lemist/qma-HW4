@@ -4,8 +4,11 @@
 //Date: Sept. 19
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 
 class dateComp implements Comparator<HW4Data> { // sort in ascending order by
 												// date
@@ -33,7 +36,7 @@ public class HW4Data {
 	private int checkNumber;
 
 	private static int nextCheckNumber = 101;
-
+	
 	public HW4Data(Date d, String desc, double amount) {
 		date = d;
 		description = desc;
@@ -50,23 +53,23 @@ public class HW4Data {
 	private void calculateFeeByAmount(double amount) {
 		if (isDeposit) {
 			if (amount < 100)
-				fee = 0.25;
+				fee = -0.25;
 			else
-				fee = amount * 0.25 / 100.;
+				fee = -amount * 0.25 / 100.;
 		} else {
 			double realAmount = -amount;
 			if (realAmount < 10)
-				fee = 0.01;
+				fee = -0.01;
 			else if (realAmount < 100) {
 				fee = realAmount * 0.01;
 			} else {
-				fee = 1;
+				fee = -1;
 			}
 		}
 	}
 
 	public double getAmount() {
-		return amount;
+		return Double.parseDouble(String.format("%.2f", amount));
 	}
 
 	public int getCheckNumber() {
@@ -94,15 +97,15 @@ public class HW4Data {
 	}
 
 	public String asTableRowString(String formate, double balance) {
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		String dateString = df.format(this.date);
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		String dateString = dateFormat.format(this.date);
+		DecimalFormat decimalFormat  = new DecimalFormat("0.00");
 		return String.format(
-				formate,
+				"%-18s%-17s%-30s%30s%30s%30s",
 				dateString,
 				this.getCheckNumber() == 0 ? "" : this.getCheckNumber(),
-				this.getDescription().subSequence(0,
-						Math.min(this.getDescription().length(), 25)),
-				this.getAmount(), this.getFee(), balance);
+				this.getDescription(),
+				decimalFormat.format(this.getAmount()), decimalFormat.format(this.getFee()), decimalFormat.format(balance));
 	}
 
 }
