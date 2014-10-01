@@ -20,6 +20,7 @@ public class HW4Data{
 		isDeposit = false;								//Whether the transaction is a deposit 
 		fee = 0;
 		checkNumber = 101;
+
 	}
 
 	public Date getDate() {return date;};

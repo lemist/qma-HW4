@@ -14,16 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/HW4Data.java</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/HW4Data.java</locationURI>
-		</link>
-		<link>
-			<name>src/HW4GUI.java</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/HW4GUI.java</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
