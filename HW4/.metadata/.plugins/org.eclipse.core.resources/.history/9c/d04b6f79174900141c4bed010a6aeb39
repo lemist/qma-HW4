@@ -1,0 +1,69 @@
+//Name: QIYUE MA
+//AndrewID: qma
+//Classs: 08-600
+//Date: Sept. 19
+
+import java.util.*;
+
+class dateComp implements Comparator<HW4Data> { // sort in ascending order by
+												// date
+	@Override
+	public int compare(HW4Data h1, HW4Data h2) {
+		if ((h1.getDate()).after(h2.getDate()))
+			return -1; // does it work?
+		else
+			return 1;
+	}
+}
+
+public class HW4Data {
+	public static void sort(HW4Data[] transaction) {
+		Arrays.sort(transaction, new dateComp()); // sort transcations by date
+
+	}
+
+	private Date date;
+	private String description;
+	private double amount;
+	private boolean isDeposit;
+	private double fee;
+	private int checkNumber;
+
+	public HW4Data(Date d, String desc, double amount) {
+		date = d;
+		description = desc;
+		amount = amount;
+		isDeposit = false; // Whether the transaction is a deposit
+		fee = 0;
+		checkNumber = 101;
+	}
+
+	public double getAmount() {
+		return amount;
+	};
+
+	public int getCheckNumber() {
+		return 0;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public double getFee() {
+		return 1;
+	}
+
+	public boolean isDeposit() {
+		return false;
+	}
+
+	public void setDeposit(boolean isDeposit) {
+		this.isDeposit = isDeposit;
+	}
+
+}

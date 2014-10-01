@@ -1,0 +1,186 @@
+//Name: QIYUE MA
+//AndrewID: qma
+//Classs: 08-600
+//Date: Sept. 19
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+/**
+ * GUI
+ * 
+ * @author Qiyue Ma
+ *
+ */
+public class HW4GUI extends JFrame {
+	private JButton writeCheckButton;
+	private JButton makeDepositButton;
+	private JTextArea tableTextArea;
+	private JTextField dateTextField;
+	private JTextField descriptionTextField;
+	private JTextField amountTextField;
+
+	private HW4Data[] transactions = new HW4Data[100];
+	private int countOfTransaction = 0;
+
+	public HW4GUI() {
+		setTitle("08-600 Checking Account Register");
+		setSize(850, 650);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		JPanel pane = new JPanel();
+		pane.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		JLabel d = new JLabel("Date");
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		pane.add(d, c);
+
+		JLabel des = new JLabel("Description");
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 2;
+		pane.add(des, c);
+		JLabel amo = new JLabel("Amount");
+		c.gridx = 3;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		pane.add(amo, c);
+
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = new Date();
+		dateTextField = new JTextField(df.format(date));
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx = 0.5;
+		pane.add(dateTextField, c);
+		descriptionTextField = new JTextField(40);
+		c.gridx = 1;
+		c.gridy = 1;
+		pane.add(descriptionTextField, c);
+		JLabel dol = new JLabel("$");
+		c.gridx = 2;
+		c.gridy = 1;
+		pane.add(dol, c);
+		amountTextField = new JTextField(8);
+		c.gridx = 3;
+		c.gridy = 1;
+		pane.add(amountTextField, c);
+
+		JPanel p = new JPanel();
+		writeCheckButton = new JButton("Write Check");
+		p.add(writeCheckButton);
+		writeCheckButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					Date checkDate = convertDateStringToDate(dateTextField
+							.getText());
+					HW4Data transaction = new HW4Data(checkDate,
+							descriptionTextField.getText(), -Double
+									.parseDouble(amountTextField.getText()));
+					transactions[countOfTransaction++] = transaction;
+					HW4Data.sort(transactions);
+
+					updateTableTextArea();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+
+			};
+
+		});
+
+		makeDepositButton = new JButton("Make Deposit");
+		p.add(makeDepositButton);
+		makeDepositButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					Date depositDate = convertDateStringToDate(dateTextField
+							.getText());
+					HW4Data transaction = new HW4Data(depositDate,
+							descriptionTextField.getText(), Double
+									.parseDouble(amountTextField.getText()));
+					transactions[countOfTransaction++] = transaction;
+					HW4Data.sort(transactions);
+
+					updateTableTextArea();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+		c.gridx = 1;
+		c.gridy = 2;
+
+		pane.add(p, c);
+
+		JTextField stf = new JTextField(35);
+		stf.setEditable(false);
+		c.gridx = 1;
+		c.gridy = 3;
+		pane.add(stf, c);
+
+		tableTextArea = new JTextArea("", 20, 50);
+		tableTextArea.setEditable(false);
+		updateTableTextArea();
+		JScrollPane sp = new JScrollPane(tableTextArea); // set the panel
+															// scrollable
+		c.gridx = 1;
+		c.gridy = 4;
+		pane.add(tableTextArea, c);
+
+		add(pane);
+		setVisible(true);
+	}
+
+	protected Date convertDateStringToDate(String text) throws ParseException {
+		Date date = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH)
+				.parse(text);
+		return date;
+	}
+
+	protected void updateTableTextArea() {
+		String formate = "%-15s%-15s%-40s%18s%18s%18s";
+		StringBuilder tableContentBuilder = new StringBuilder();
+		tableContentBuilder.append(String.format(
+				formate, "Date", "Check#",
+				"Description", "Amount", "Fee", "Balance")
+				+ "\n");
+		double balance = 0;
+		for (int i = 0; i < countOfTransaction; i++) {
+			HW4Data transaction = transactions[i];
+			balance += transaction.getAmount();
+			tableContentBuilder.append(transaction.asTableRowString(formate, balance) + "\n");
+		}
+		tableTextArea.setText(tableContentBuilder.toString());
+	}
+
+	public static void main(String[] args) {
+		new HW4GUI();
+
+	}
+}

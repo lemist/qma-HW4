@@ -1,0 +1,124 @@
+//Name: QIYUE MA
+//AndrewID: qma
+//Classs: 08-600
+//Date: Sept. 19
+
+import java.awt.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.util.Date;
+import java.text.*;
+import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+
+public class HW4GUI extends JFrame implements ActionListener{
+	private JButton writeCheckButton;
+	private JButton makeDepositButton;
+	private JTextArea ta;
+ 	private JTextField dtf;
+ 	private JTextField destf;
+ 	private JTextField amotf;
+
+	HW4Data[] data = new HW4Data[100];
+
+	public HW4GUI(){
+		setTitle("08-600 Checking Account Register");
+		setSize(850,650);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		JPanel pane = new JPanel();
+		pane.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		JLabel d = new JLabel("Date"); 
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		pane.add(d,c);
+		
+		JLabel des = new JLabel("Description");
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 2;
+		pane.add(des,c);
+		JLabel amo = new JLabel("Amount");
+		c.gridx = 3;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		pane.add(amo, c);
+			
+
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = new Date();
+		dtf = new JTextField(df.format(date));
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx = 0.5;
+		pane.add(dtf, c);
+		destf = new JTextField(40);
+		c.gridx = 1;
+		c.gridy = 1;
+		pane.add(destf, c);
+		JLabel dol = new JLabel("$");
+		c.gridx = 2;
+		c.gridy = 1;
+		pane.add(dol, c);
+		amotf = new JTextField(8);
+		c.gridx = 3;
+		c.gridy = 1;
+		pane.add(amotf, c);
+			
+
+		JPanel p = new JPanel();
+		writeCheckButton = new JButton("Write Check");
+		p.add(writeCheckButton);
+		makeDepositButton = new JButton("Make Deposit");
+		p.add(makeDepositButton);
+		c.gridx = 1;
+		c.gridy = 2;
+			
+		writeCheckButton.addActionListener(this);
+		makeDepositButton.addActionListener(this);
+
+		pane.add(p,c);
+			
+		JTextField stf = new JTextField(35);
+		stf.setEditable(false);
+		c.gridx = 1;
+		c.gridy = 3;
+		pane.add(stf,c);
+			
+		ta = new JTextArea("    Date           Check#            Description                                   Amount           Fee           Balance       \n", 20, 40);
+		ta.setEditable(false);
+		JScrollPane sp = new JScrollPane(ta);		//set the panel scrollable
+		c.gridx = 1;	
+		c.gridy = 4;
+		pane.add(ta,c);
+
+		add(pane);
+		setVisible(true);
+
+	}
+
+	public void actionPerformed(ActionEvent event){
+		if (event.getSource() == writeCheckButton){
+			ta.append(dtf.getText() + destf.getText() + amotf.getText() + "\n"); 	
+		}
+		if (event.getSource() == makeDepositButton){
+			ta.append(dtf.getText() + destf.getText() + amotf.getText() + "\n"); 	
+		}
+	}
+
+	public static void main(String[] args){
+		new HW4GUI();
+
+	}
+}
